@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buku Tamu Digital - Kantor Desa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .scanner-guide {
+            position: relative;
+            border: 2px dashed #10B981;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .qr-animation {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            position: relative;
+            border: 3px solid #10B981;
+            border-radius: 12px;
+        }
+        
+        .qr-animation::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #10B981, transparent);
+            animation: scan 2s infinite;
+        }
+        
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+        
+        .guest-entry {
+            transition: all 0.3s ease;
+            border-left: 4px solid #10B981;
+        }
+        
+        .guest-entry:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mobile-instruction {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-green-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cda49abe-7bfe-44de-8a08-0300425179c5.png" alt="Logo Kantor Desa dengan gambar rumah adat tradisional dengan atap joglo dan warna hijau dominan" class="w-12 h-12 rounded-lg" />
+                    <div>
+                        <h1 class="text-2xl font-bold">BUKU TAMU DIGITAL</h1>
+                        <p class="text-green-100 text-sm">Kantor Desa Maju Jaya</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-green-100" id="current-date">Senin, 1 Januari 2024</p>
+                    <p class="text-green-100 text-sm" id="current-time">00:00:00</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <!-- QR Scanner Section -->
+        <section class="mb-12">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Scan QR Code Tamu</h2>
+                <p class="text-gray-600">Gunakan kamera HP Anda untuk scan QR code dan langsung mengakses link</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Mobile Scanner Guide -->
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Cara Scan QR Code</h3>
+                    
+                    <div class="mobile-instruction">
+                        <h4 class="font-bold text-lg mb-3">📱 Gunakan Kamera HP</h4>
+                        <p class="text-sm">Buka kamera HP dan arahkan ke QR code untuk scan otomatis</p>
+                    </div>
+
+                    <div class="scanner-guide mb-6">
+                        <div class="qr-animation mb-4"></div>
+                        <p class="text-gray-600 text-sm">Arahkan kamera HP ke area ini</p>
+                    </div>
+
+                    <div class="space-y-3 text-sm text-gray-700">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-6 h-6 bg-green-100 text-green-800 rounded-full flex items-center justify-center">1</span>
+                            <span>Buka aplikasi kamera di HP Anda</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-6 h-6 bg-green-100 text-green-800 rounded-full flex items-center justify-center">2</span>
+                            <span>Arahkan kamera ke QR code</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-6 h-6 bg-green-100 text-green-800 rounded-full flex items-center justify-center">3</span>
+                            <span>Tap notifikasi yang muncul untuk membuka link</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QR Code Generator & Result -->
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Generator QR Code</h3>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Masukkan Link untuk QR Code</label>
+                        <input type="url" id="qr-link" placeholder="https://example.com" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        <button onclick="generateQRCode()" class="w-full mt-3 bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                            Generate QR Code
+                        </button>
+                    </div>
+
+                    <div id="qr-result" class="text-center p-4 border-2 border-dashed border-gray-300 rounded-lg mb-4">
+                        <p class="text-gray-500">QR code akan muncul di sini</p>
+                    </div>
+
+                    <div class="text-center">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b872c670-97d2-4be7-b263-2ab6b6ed91cb.png" alt="QR code hasil generate akan ditampilkan di sini" class="mx-auto w-32 h-32 border rounded-lg hidden" id="generated-qr" />
+                    </div>
+
+                    <div id="link-preview" class="mt-4 p-3 bg-blue-50 rounded-lg hidden">
+                        <p class="text-sm text-blue-800 font-medium">Link siap dibuka:</p>
+                        <p id="preview-url" class="text-sm text-blue-600 break-words"></p>
+                        <button onclick="openGeneratedLink()" class="w-full mt-2 bg-blue-600 text-white py-2 px-4 rounded-lg text-sm hover:bg-blue-700 transition-colors">
+                            Buka Link Sekarang
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Link Section -->
+        <section class="mb-12">
+            <div class="bg-white rounded-xl p-6 shadow-lg">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Link Penting Kantor Desa</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <a href="https://wa.me/628123456789" class="p-4 bg-green-50 rounded-lg text-center hover:bg-green-100 transition-colors">
+                        <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <span class="text-white text-lg">📞</span>
+                        </div>
+                        <p class="font-semibold text-green-800">WhatsApp</p>
+                        <p class="text-sm text-green-600">Kontak Darurat</p>
+                    </a>
+                    
+                    <a href="mailto:desamajujaya@email.com" class="p-4 bg-blue-50 rounded-lg text-center hover:bg-blue-100 transition-colors">
+                        <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <span class="text-white text-lg">✉️</span>
+                        </div>
+                        <p class="font-semibold text-blue-800">Email</p>
+                        <p class="text-sm text-blue-600">Pengaduan</p>
+                    </a>
+                    
+                    <a href="https://maps.app.goo.gl" class="p-4 bg-red-50 rounded-lg text-center hover:bg-red-100 transition-colors">
+                        <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <span class="text-white text-lg">📍</span>
+                        </div>
+                        <p class="font-semibold text-red-800">Maps</p>
+                        <p class="text-sm text-red-600">Lokasi Kantor</p>
+                    </a>
+                    
+                    <a href="https://website-desa.com" class="p-4 bg-purple-50 rounded-lg text-center hover:bg-purple-100 transition-colors">
+                        <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <span class="text-white text-lg">🌐</span>
+                        </div>
+                        <p class="font-semibold text-purple-800">Website</p>
+                        <p class="text-sm text-purple-600">Informasi Desa</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Manual Entry Form -->
+        <section class="mb-12">
+            <div class="bg-white rounded-xl p-6 shadow-lg">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Form Buku Tamu Manual</h2>
+                <form id="guest-form" class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
+                        <input type="text" id="nama" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">No. Telepon</label>
+                        <input type="tel" id="telepon" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Alamat</label>
+                        <input type="text" id="alamat" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Keperluan</label>
+                        <select id="keperluan" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                            <option value="">Pilih Keperluan</option>
+                            <option value="administrasi">Administrasi</option>
+                            <option value="konsultasi">Konsultasi</option>
+                            <option value="pengaduan">Pengaduan</option>
+                            <option value="surat-menyurat">Surat Menyurat</option>
+                            <option value="lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan</label>
+                        <textarea id="keterangan" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"></textarea>
+                    </div>
+                    <div class="md:col-span-2">
+                        <button type="submit" class="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                            Simpan Data Tamu
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Guest List -->
+        <section>
+            <div class="bg-white rounded-xl p-6 shadow-lg">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Daftar Tamu Hari Ini</h2>
+                <div id="guest-list" class="space-y-4">
+                    <div class="text-center py-8 text-gray-500">
+                        <p>Belum ada data tamu untuk hari ini</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>© 2024 Kantor Desa Maju Jaya. All rights reserved.</p>
+            <p class="text-gray-400 mt-2">Sistem Buku Tamu Digital v2.0 - Mobile Optimized</p>
+        </div>
+    </footer>
+
+    <script>
+        // Update date and time
+        function updateDateTime() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').textContent = now.toLocaleDateString('id-ID', options);
+            document.getElementById('current-time').textContent = now.toLocaleTimeString('id-ID');
+        }
+        
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        // QR Code Generator
+        function generateQRCode() {
+            const link = document.getElementById('qr-link').value.trim();
+            
+            if (!link) {
+                alert('Silakan masukkan link terlebih dahulu');
+                return;
+            }
+            
+            if (!link.startsWith('http://') && !link.startsWith('https://')) {
+                alert('Link harus dimulai dengan http:// atau https://');
+                return;
+            }
+            
+            // Generate QR code using external service
+            const qrCode = document.getElementById('generated-qr');
+            qrCode.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(link)}`;
+            qrCode.alt = `QR code untuk: ${link}`;
+            qrCode.classList.remove('hidden');
+            
+            // Show link preview
+            const linkPreview = document.getElementById('link-preview');
+            const previewUrl = document.getElementById('preview-url');
+            previewUrl.textContent = link;
+            linkPreview.classList.remove('hidden');
+            
+            // Update result message
+            document.getElementById('qr-result').innerHTML = `
+                <p class="text-green-600 font-semibold">QR Code Berhasil Digenerate!</p>
+                <p class="text-sm text-gray-600">Scan dengan kamera HP untuk mengakses link</p>
+            `;
+        }
+
+        function openGeneratedLink() {
+            const link = document.getElementById('qr-link').value.trim();
+            if (link) {
+                window.open(link, '_blank');
+            }
+        }
+
+        // Guest Form Handling
+        const guestForm = document.getElementById('guest-form');
+        const guestList = document.getElementById('guest-list');
+        
+        guestForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const guestData = {
+                nama: document.getElementById('nama').value,
+                telepon: document.getElementById('telepon').value,
+                alamat: document.getElementById('alamat').value,
+                keperluan: document.getElementById('keperluan').value,
+                keterangan: document.getElementById('keterangan').value,
+                waktu: new Date().toLocaleString('id-ID')
+            };
+            
+            addGuestToLocalStorage(guestData);
+            displayGuests();
+            
+            // Reset form
+            guestForm.reset();
+            
+            // Show success message
+            alert('Data tamu berhasil disimpan!');
+        });
+
+        function addGuestToLocalStorage(guestData) {
+            const today = new Date().toLocaleDateString('id-ID');
+            let guests = JSON.parse(localStorage.getItem(`guests_${today}`) || '[]');
+            guests.push(guestData);
+            localStorage.setItem(`guests_${today}`, JSON.stringify(guests));
+        }
+
+        function displayGuests() {
+            const today = new Date().toLocaleDateString('id-ID');
+            const guests = JSON.parse(localStorage.getItem(`guests_${today}`) || '[]');
+            
+            if (guests.length === 0) {
+                guestList.innerHTML = '<div class="text-center py-8 text-gray-500"><p>Belum ada data tamu untuk hari ini</p></div>';
+                return;
+            }
+            
+            guestList.innerHTML = guests.map((guest, index) => `
+                <div class="guest-entry bg-white p-4 rounded-lg border-l-4 border-green-500 shadow-sm">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-semibold text-gray-800">${guest.nama}</h3>
+                        <span class="text-sm text-gray-500">${guest.waktu}</span>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-2 text-sm text-gray-600">
+                        <div><span class="font-medium">Telepon:</span> ${guest.telepon || '-'}</div>
+                        <div><span class="font-medium">Alamat:</span> ${guest.alamat || '-'}</div>
+                        <div><span class="font-medium">Keperluan:</span> ${guest.keperluan || '-'}</div>
+                    </div>
+                    ${guest.keterangan ? `<div class="mt-2 text-sm text-gray-600"><span class="font-medium">Keterangan:</span> ${guest.keterangan}</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        // Display existing guests on page load
+        displayGuests();
+
+        // Mobile detection and guidance
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        if (isMobileDevice()) {
+            // Add mobile-specific guidance
+            const mobileGuide = document.createElement('div');
+            mobileGuide.className = 'fixed bottom-4 left-4 right-4 bg-green-600 text-white p-3 rounded-lg shadow-lg z-50';
+            mobileGuide.innerHTML = `
+                <p class="text-sm text-center">📱 Gunakan kamera HP untuk scan QR code secara langsung</p>
+            `;
+            document.body.appendChild(mobileGuide);
+            
+            // Remove after 5 seconds
+            setTimeout(() => {
+                mobileGuide.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
+
